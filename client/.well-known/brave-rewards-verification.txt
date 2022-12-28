@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: codex-cyan.vercel.app
+Token: 06bc246d978b99284c9b73652b83d9e7db3e392ae973572c74e056961c2d12e7

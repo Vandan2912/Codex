@@ -33,6 +33,9 @@ function typeText(element, text) {
   }, 20);
 }
 
+// generate unique ID for each message div of bot
+// necessary for typing text effect for that specific reply
+// without unique ID, typing text will work on every element
 function generateUniqueId() {
   const timestamp = Date.now();
   const randomNumber = Math.random();
@@ -43,23 +46,19 @@ function generateUniqueId() {
 
 function chatStripe(isAi, value, uniqueId) {
   return `
-      <div class="wrapper ${isAi && "ai"}">
-          <div class="chat">
-              <div class="profile">
-                  <img 
-                    src=${isAi ? bot : user} 
-                    alt="${isAi ? "bot" : "user"}" 
-                  />
-              </div>
-              <div class="message" id=${uniqueId}>${value}</div>
-          </div>
-      </div>
-  `;
+        <div class="wrapper ${isAi && "ai"}">
+            <div class="chat">
+                <div class="profile">
+                    <img 
+                      src=${isAi ? bot : user} 
+                      alt="${isAi ? "bot" : "user"}" 
+                    />
+                </div>
+                <div class="message" id=${uniqueId}>${value}</div>
+            </div>
+        </div>
+    `;
 }
-
-window.setInterval(function () {
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-}, 100);
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -85,7 +84,7 @@ const handleSubmit = async (e) => {
   // messageDiv.innerHTML = "..."
   loader(messageDiv);
 
-  const response = await fetch("https://codex-pts3.onrender.com/", {
+  const response = await fetch("http://localhost:5000/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -97,6 +96,7 @@ const handleSubmit = async (e) => {
 
   clearInterval(loadInterval);
   messageDiv.innerHTML = " ";
+
   if (response.ok) {
     const data = await response.json();
     const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
